@@ -1,75 +1,443 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Quiz Tuyển Sinh 10</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 </head>
+<body class="bg-slate-100 min-h-screen text-slate-800">
+  <div class="max-w-6xl mx-auto p-4 md:p-8">
+    <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 md:p-8">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+        <div>
+          <p class="text-sm font-semibold text-blue-600">APP QUIZ TUYỂN SINH 10</p>
+          <h1 class="text-3xl md:text-4xl font-bold mt-1">Luyện Thi Tuyển Sinh 10</h1>
+          <p class="mt-2 text-slate-600">
+            Ôn tập các dạng: Tenses, Passive voice, Comparisons, Relative clauses, Conditionals, Rewrite.
+          </p>
+          <p class="mt-2 text-sm font-medium text-slate-500">Giáo viên: Phan Thanh Tân</p>
+        </div>
 
-<body class="bg-gray-100 p-6">
+        <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200 min-w-[280px]">
+          <p class="font-semibold mb-3">Chế độ thông minh</p>
+          <label class="flex items-center gap-3 cursor-pointer">
+            <input id="smartMode" type="checkbox" checked class="w-5 h-5">
+            <span class="text-sm">Ưu tiên câu mới và câu đã làm sai</span>
+          </label>
 
-<div class="max-w-3xl mx-auto bg-white p-6 rounded-xl shadow">
+          <div class="grid grid-cols-2 gap-3 mt-4 text-sm">
+            <div class="bg-white rounded-xl p-3 border border-slate-200">
+              <p class="text-slate-500">Câu chưa học</p>
+              <p id="unseenCount" class="text-xl font-bold">0</p>
+            </div>
+            <div class="bg-white rounded-xl p-3 border border-slate-200">
+              <p class="text-slate-500">Câu cần ôn lại</p>
+              <p id="reviewCount" class="text-xl font-bold">0</p>
+            </div>
+          </div>
+        </div>
+      </div>
 
-<h1 class="text-2xl font-bold mb-2">Luyện Thi Tuyển Sinh 10</h1>
-<p class="text-sm text-gray-500 mb-4">Giáo viên: Phan Thanh Tân</p>
+      <div class="flex flex-wrap gap-3 mt-6">
+        <button onclick="startQuiz(10)" class="px-5 py-3 rounded-2xl bg-blue-600 text-white font-semibold">
+          Luyện tập 10 câu
+        </button>
+        <button onclick="startQuiz(20)" class="px-5 py-3 rounded-2xl bg-emerald-600 text-white font-semibold">
+          Luyện tập 20 câu
+        </button>
+        <button onclick="resetHistory()" class="px-5 py-3 rounded-2xl bg-rose-600 text-white font-semibold">
+          Xóa lịch sử làm bài
+        </button>
+      </div>
 
-<button onclick="startQuiz()" class="bg-blue-500 text-white px-4 py-2 rounded">
-Bắt đầu làm bài
-</button>
+      <div class="mt-6 bg-slate-50 rounded-2xl border border-slate-200 p-4">
+        <h2 class="font-bold text-lg">Tải câu hỏi từ Excel</h2>
+        <p class="text-sm text-slate-600 mt-1">
+          File Excel nên có các cột: <b>topic</b>, <b>question</b>, <b>option1</b>, <b>option2</b>, <b>option3</b>, <b>option4</b>, <b>answer</b>, <b>explanation</b>
+        </p>
+        <input id="excelFile" type="file" accept=".xlsx,.xls" class="mt-3 block w-full text-sm" />
+        <div class="mt-3 flex flex-wrap gap-3">
+          <button onclick="importExcel()" class="px-4 py-2 rounded-xl bg-slate-800 text-white font-semibold">
+            Nhập file Excel
+          </button>
+          <button onclick="loadSampleQuestions()" class="px-4 py-2 rounded-xl bg-amber-500 text-white font-semibold">
+            Dùng bộ câu hỏi mẫu
+          </button>
+        </div>
+        <p id="importStatus" class="mt-3 text-sm text-slate-600"></p>
+      </div>
+    </div>
 
-<div id="quiz" class="mt-6"></div>
+    <div class="grid lg:grid-cols-[2fr_1fr] gap-6 mt-6">
+      <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6">
+        <div id="welcomeBox" class="py-12 text-center">
+          <h2 class="text-2xl font-bold">Sẵn sàng bắt đầu</h2>
+          <p class="mt-3 text-slate-600 max-w-2xl mx-auto">
+            Cô có thể dùng bộ câu hỏi mẫu hoặc tải file Excel của mình lên, sau đó chọn luyện 10 câu hoặc 20 câu.
+          </p>
+        </div>
 
-</div>
+        <div id="quizBox" class="hidden">
+          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-6">
+            <div>
+              <p id="questionCounter" class="text-sm text-slate-500"></p>
+              <p id="questionTopic" class="text-sm font-medium text-blue-600 mt-1"></p>
+            </div>
+            <div class="w-full md:w-64 bg-slate-200 rounded-full h-3 overflow-hidden">
+              <div id="progressBar" class="h-full bg-blue-600" style="width: 0%"></div>
+            </div>
+          </div>
 
-<script>
-const questions = [
-  {
-    q: "She _____ to school every day.",
-    options: ["go","goes","going","gone"],
-    answer: "goes"
-  },
-  {
-    q: "English _____ all over the world.",
-    options: ["speaks","is spoken","spoke","has spoken"],
-    answer: "is spoken"
-  }
-];
+          <div class="rounded-2xl bg-slate-50 border border-slate-200 p-5">
+            <h3 id="questionText" class="text-xl font-semibold leading-8"></h3>
+            <div id="optionsBox" class="grid gap-3 mt-5"></div>
+            <div id="explanationBox" class="hidden mt-5 p-4 rounded-2xl bg-amber-50 border border-amber-200">
+              <p class="font-semibold">Giải thích:</p>
+              <p id="explanationText" class="mt-1 text-slate-700"></p>
+            </div>
+          </div>
 
-let current = 0;
-let score = 0;
+          <div class="flex flex-wrap justify-between gap-3 mt-6">
+            <button onclick="prevQuestion()" id="prevBtn" class="px-5 py-3 rounded-2xl bg-slate-200 font-semibold">
+              Câu trước
+            </button>
 
-function startQuiz(){
-  current = 0;
-  score = 0;
-  showQuestion();
-}
+            <div class="flex gap-3 flex-wrap">
+              <button onclick="submitQuiz()" id="submitBtn" class="px-5 py-3 rounded-2xl bg-purple-600 text-white font-semibold">
+                Nộp bài
+              </button>
+              <button onclick="nextQuestion()" id="nextBtn" class="px-5 py-3 rounded-2xl bg-slate-800 text-white font-semibold">
+                Câu tiếp
+              </button>
+            </div>
+          </div>
 
-function showQuestion(){
-  const q = questions[current];
-  let html = "<h2 class='font-bold mb-3'>" + q.q + "</h2>";
+          <div id="resultBox" class="hidden mt-8 rounded-2xl bg-blue-50 border border-blue-200 p-5">
+            <h3 id="resultText" class="text-2xl font-bold"></h3>
+            <p class="mt-2 text-slate-700">Cô có thể bấm qua từng câu để xem đáp án đúng và lời giải.</p>
+          </div>
+        </div>
+      </div>
 
-  q.options.forEach(opt=>{
-    html += `<button onclick="check('${opt}')" class="block w-full text-left border p-2 mb-2 rounded">${opt}</button>`;
-  });
+      <div class="grid gap-6">
+        <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6">
+          <h3 class="text-xl font-bold">Lịch sử làm bài</h3>
+          <div id="historyBox" class="mt-4"></div>
+        </div>
 
-  document.getElementById("quiz").innerHTML = html;
-}
+        <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-6">
+          <h3 class="text-xl font-bold">Số câu hiện có</h3>
+          <p id="questionBankCount" class="mt-3 text-3xl font-bold">0</p>
+          <p class="mt-2 text-slate-600 text-sm">App sẽ dùng bộ câu hỏi mẫu hoặc câu hỏi cô tải lên từ Excel.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
-function check(ans){
-  if(ans === questions[current].answer){
-    score++;
-  }
+  <script>
+    const STORAGE_KEYS = {
+      history: "quiz_ts10_history_ptt",
+      attempts: "quiz_ts10_attempts_ptt",
+      customBank: "quiz_ts10_custom_bank_ptt"
+    };
 
-  current++;
+    const sampleQuestionBank = [
+      { id: 1, topic: "Tenses", question: "She _____ to school every day.", options: ["go", "goes", "going", "gone"], answer: "goes", explanation: "Chủ ngữ ngôi thứ ba số ít ở thì hiện tại đơn dùng động từ thêm -es." },
+      { id: 2, topic: "Passive voice", question: "The homework _____ by Nam yesterday.", options: ["did", "was done", "is done", "does"], answer: "was done", explanation: "Câu bị động thì quá khứ đơn: was/were + past participle." },
+      { id: 3, topic: "Comparisons", question: "Lan is _____ than Hoa.", options: ["more tall", "taller", "tallest", "the taller"], answer: "taller", explanation: "So sánh hơn của tính từ ngắn: adjective + er." },
+      { id: 4, topic: "Relative clauses", question: "The girl _____ is wearing a red dress is my sister.", options: ["who", "whom", "whose", "which"], answer: "who", explanation: "Dùng who thay cho người, làm chủ ngữ trong mệnh đề quan hệ." },
+      { id: 5, topic: "Conditionals", question: "If it rains tomorrow, we _____ at home.", options: ["stay", "will stay", "stayed", "would stay"], answer: "will stay", explanation: "Câu điều kiện loại 1: If + hiện tại đơn, will + V." },
+      { id: 6, topic: "Rewrite", question: "Choose the sentence closest in meaning: 'They built this bridge last year.'", options: ["This bridge is built last year.", "This bridge was built last year.", "This bridge built last year.", "This bridge has built last year."], answer: "This bridge was built last year.", explanation: "Chuyển sang bị động ở quá khứ đơn: was/were + V3/ed." },
+      { id: 7, topic: "Tenses", question: "Listen! Someone _____ at the door.", options: ["knocks", "is knocking", "knocked", "has knocked"], answer: "is knocking", explanation: "Dấu hiệu 'Listen!' thường dùng thì hiện tại tiếp diễn." },
+      { id: 8, topic: "Passive voice", question: "English _____ all over the world.", options: ["speaks", "is spoken", "spoke", "has spoken"], answer: "is spoken", explanation: "Câu bị động hiện tại đơn: am/is/are + V3/ed." },
+      { id: 9, topic: "Comparisons", question: "This is the _____ book I have ever read.", options: ["most interesting", "more interesting", "interesting", "interest"], answer: "most interesting", explanation: "So sánh nhất với tính từ dài: the most + adjective." },
+      { id: 10, topic: "Relative clauses", question: "The house _____ roof is red belongs to my uncle.", options: ["who", "which", "whose", "whom"], answer: "whose", explanation: "Whose dùng để chỉ sự sở hữu." },
+      { id: 11, topic: "Conditionals", question: "If I _____ enough money, I would buy a new bike.", options: ["have", "had", "will have", "am having"], answer: "had", explanation: "Câu điều kiện loại 2: If + quá khứ đơn, would + V." },
+      { id: 12, topic: "Rewrite", question: "Choose the sentence closest in meaning: 'I last saw him two months ago.'", options: ["I haven’t seen him for two months.", "I didn’t see him for two months.", "I don’t see him for two months.", "I won’t see him for two months."], answer: "I haven’t seen him for two months.", explanation: "Cấu trúc chuyển đổi: last + V2 -> haven’t/hasn’t + V3 for + khoảng thời gian." }
+    ];
 
-  if(current < questions.length){
-    showQuestion();
-  } else {
-    document.getElementById("quiz").innerHTML =
-      "<h2>Kết quả: " + score + "/" + questions.length + "</h2>";
-  }
-}
-</script>
+    let questionBank = [];
+    let quizSet = [];
+    let currentIndex = 0;
+    let selectedAnswers = {};
+    let submitted = false;
 
+    function getStoredJson(key, fallback) {
+      try {
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : fallback;
+      } catch {
+        return fallback;
+      }
+    }
+
+    function saveJson(key, data) {
+      localStorage.setItem(key, JSON.stringify(data));
+    }
+
+    function shuffle(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function pickQuestions(bank, history, count, smartMode) {
+      if (!smartMode) return shuffle(bank).slice(0, Math.min(count, bank.length));
+
+      const weighted = bank.map((q) => {
+        const stat = history[q.id] || { seen: 0, correct: 0, wrong: 0 };
+        let weight = 1;
+        if (stat.seen === 0) weight += 6;
+        weight += stat.wrong * 3;
+        weight += stat.correct === 0 && stat.seen > 0 ? 2 : 0;
+        weight -= Math.min(stat.correct, 2);
+        return { ...q, weight: Math.max(1, weight) };
+      });
+
+      const chosen = [];
+      const pool = [...weighted];
+      while (chosen.length < Math.min(count, pool.length)) {
+        const total = pool.reduce((sum, item) => sum + item.weight, 0);
+        let r = Math.random() * total;
+        let selectedIndex = 0;
+        for (let i = 0; i < pool.length; i++) {
+          r -= pool[i].weight;
+          if (r <= 0) {
+            selectedIndex = i;
+            break;
+          }
+        }
+        chosen.push(pool[selectedIndex]);
+        pool.splice(selectedIndex, 1);
+      }
+      return chosen;
+    }
+
+    function updateStats() {
+      const historyStats = getStoredJson(STORAGE_KEYS.history, {});
+      const unseen = questionBank.filter(q => !(historyStats[q.id] && historyStats[q.id].seen)).length;
+      const review = Object.values(historyStats).filter(s => s.wrong > 0).length;
+
+      document.getElementById("unseenCount").textContent = unseen;
+      document.getElementById("reviewCount").textContent = review;
+      document.getElementById("questionBankCount").textContent = questionBank.length;
+    }
+
+    function renderHistory() {
+      const attempts = getStoredJson(STORAGE_KEYS.attempts, []);
+      const box = document.getElementById("historyBox");
+
+      if (!attempts.length) {
+        box.innerHTML = '<p class="text-slate-500">Chưa có dữ liệu.</p>';
+        return;
+      }
+
+      box.innerHTML = attempts.map(item => `
+        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4 mb-3">
+          <p class="font-semibold">${item.correct}/${item.total}</p>
+          <p class="text-sm text-slate-500 mt-1">${item.time}</p>
+          <p class="text-sm mt-2">${item.smartMode ? "Smart Mode" : "Ngẫu nhiên"}</p>
+          <p class="text-sm text-slate-600 mt-1">${item.topics.join(", ")}</p>
+        </div>
+      `).join("");
+    }
+
+    function loadInitialBank() {
+      const customBank = getStoredJson(STORAGE_KEYS.customBank, null);
+      questionBank = customBank && customBank.length ? customBank : sampleQuestionBank;
+      updateStats();
+      renderHistory();
+    }
+
+    function loadSampleQuestions() {
+      questionBank = sampleQuestionBank;
+      saveJson(STORAGE_KEYS.customBank, sampleQuestionBank);
+      document.getElementById("importStatus").textContent = "Đã nạp bộ câu hỏi mẫu.";
+      updateStats();
+    }
+
+    function importExcel() {
+      const input = document.getElementById("excelFile");
+      const file = input.files[0];
+      if (!file) {
+        document.getElementById("importStatus").textContent = "Cô hãy chọn file Excel trước.";
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: "array" });
+        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+        const rows = XLSX.utils.sheet_to_json(firstSheet);
+
+        const imported = rows.map((row, index) => ({
+          id: index + 1,
+          topic: String(row.topic || "").trim(),
+          question: String(row.question || "").trim(),
+          options: [
+            String(row.option1 || "").trim(),
+            String(row.option2 || "").trim(),
+            String(row.option3 || "").trim(),
+            String(row.option4 || "").trim()
+          ],
+          answer: String(row.answer || "").trim(),
+          explanation: String(row.explanation || "").trim()
+        })).filter(q =>
+          q.question &&
+          q.options.every(Boolean) &&
+          q.answer
+        );
+
+        if (!imported.length) {
+          document.getElementById("importStatus").textContent = "Không đọc được câu hỏi. Cô kiểm tra lại tên các cột trong Excel.";
+          return;
+        }
+
+        questionBank = imported;
+        saveJson(STORAGE_KEYS.customBank, imported);
+        document.getElementById("importStatus").textContent = `Đã nhập thành công ${imported.length} câu hỏi từ Excel.`;
+        updateStats();
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
+    function startQuiz(count) {
+      if (!questionBank.length) {
+        alert("Chưa có câu hỏi. Cô hãy dùng bộ mẫu hoặc nhập file Excel.");
+        return;
+      }
+
+      const historyStats = getStoredJson(STORAGE_KEYS.history, {});
+      const smartMode = document.getElementById("smartMode").checked;
+      quizSet = pickQuestions(questionBank, historyStats, count, smartMode);
+      currentIndex = 0;
+      selectedAnswers = {};
+      submitted = false;
+
+      document.getElementById("welcomeBox").classList.add("hidden");
+      document.getElementById("quizBox").classList.remove("hidden");
+      document.getElementById("resultBox").classList.add("hidden");
+      document.getElementById("submitBtn").classList.remove("hidden");
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const q = quizSet[currentIndex];
+      if (!q) return;
+
+      document.getElementById("questionCounter").textContent = `Câu ${currentIndex + 1} / ${quizSet.length}`;
+      document.getElementById("questionTopic").textContent = `Chủ đề: ${q.topic || "Chưa phân loại"}`;
+      document.getElementById("questionText").textContent = q.question;
+      document.getElementById("progressBar").style.width = `${((currentIndex + 1) / quizSet.length) * 100}%`;
+
+      const optionsBox = document.getElementById("optionsBox");
+      optionsBox.innerHTML = "";
+
+      q.options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.textContent = option;
+        btn.className = "w-full text-left p-4 rounded-2xl border transition font-medium";
+        const selected = selectedAnswers[q.id] === option;
+
+        if (submitted && option === q.answer) {
+          btn.className += " border-emerald-500 bg-emerald-50";
+        } else if (submitted && selected && option !== q.answer) {
+          btn.className += " border-rose-500 bg-rose-50";
+        } else if (selected) {
+          btn.className += " border-blue-500 bg-blue-50";
+        } else {
+          btn.className += " border-slate-200 bg-white";
+        }
+
+        btn.onclick = () => chooseAnswer(q.id, option);
+        optionsBox.appendChild(btn);
+      });
+
+      const explanationBox = document.getElementById("explanationBox");
+      if (submitted) {
+        explanationBox.classList.remove("hidden");
+        document.getElementById("explanationText").textContent = q.explanation || "Chưa có giải thích.";
+      } else {
+        explanationBox.classList.add("hidden");
+      }
+
+      document.getElementById("prevBtn").disabled = currentIndex === 0;
+      document.getElementById("nextBtn").disabled = currentIndex === quizSet.length - 1;
+    }
+
+    function chooseAnswer(questionId, option) {
+      if (submitted) return;
+      selectedAnswers[questionId] = option;
+      renderQuestion();
+    }
+
+    function prevQuestion() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        renderQuestion();
+      }
+    }
+
+    function nextQuestion() {
+      if (currentIndex < quizSet.length - 1) {
+        currentIndex++;
+        renderQuestion();
+      }
+    }
+
+    function submitQuiz() {
+      if (!quizSet.length) return;
+
+      const historyStats = getStoredJson(STORAGE_KEYS.history, {});
+      quizSet.forEach(q => {
+        const oldStat = historyStats[q.id] || { seen: 0, correct: 0, wrong: 0 };
+        const isCorrect = selectedAnswers[q.id] === q.answer;
+        historyStats[q.id] = {
+          seen: oldStat.seen + 1,
+          correct: oldStat.correct + (isCorrect ? 1 : 0),
+          wrong: oldStat.wrong + (isCorrect ? 0 : 1)
+        };
+      });
+      saveJson(STORAGE_KEYS.history, historyStats);
+
+      const correct = quizSet.reduce((sum, q) => sum + (selectedAnswers[q.id] === q.answer ? 1 : 0), 0);
+      const attempts = getStoredJson(STORAGE_KEYS.attempts, []);
+      const smartMode = document.getElementById("smartMode").checked;
+
+      attempts.unshift({
+        time: new Date().toLocaleString("vi-VN"),
+        total: quizSet.length,
+        correct,
+        smartMode,
+        topics: [...new Set(quizSet.map(q => q.topic || "Chưa phân loại"))]
+      });
+      saveJson(STORAGE_KEYS.attempts, attempts.slice(0, 20));
+
+      submitted = true;
+      document.getElementById("submitBtn").classList.add("hidden");
+      document.getElementById("resultBox").classList.remove("hidden");
+      document.getElementById("resultText").textContent = `Kết quả: ${correct}/${quizSet.length}`;
+
+      updateStats();
+      renderHistory();
+      renderQuestion();
+    }
+
+    function resetHistory() {
+      localStorage.removeItem(STORAGE_KEYS.history);
+      localStorage.removeItem(STORAGE_KEYS.attempts);
+      document.getElementById("importStatus").textContent = "Đã xóa lịch sử làm bài.";
+      updateStats();
+      renderHistory();
+    }
+
+    loadInitialBank();
+  </script>
 </body>
 </html>
