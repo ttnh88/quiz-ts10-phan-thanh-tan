@@ -125,38 +125,103 @@
       customBank: 'quiz_ts10_custom_bank_ptt'
     };
 
-    const defaultBank = [
-      { id: 1, topic: 'Tenses', question: 'She _____ to school every day.', options: ['go', 'goes', 'going', 'gone'], answer: 'goes', explanation: 'Chủ ngữ ngôi thứ ba số ít ở thì hiện tại đơn dùng goes.' },
-      { id: 2, topic: 'Passive voice', question: 'English _____ all over the world.', options: ['speaks', 'is spoken', 'spoke', 'has spoken'], answer: 'is spoken', explanation: 'Câu bị động hiện tại đơn: is/am/are + V3.' },
-      { id: 3, topic: 'Comparisons', question: 'Lan is _____ than Hoa.', options: ['more tall', 'taller', 'tallest', 'the taller'], answer: 'taller', explanation: 'So sánh hơn của tính từ ngắn: adj + er.' },
-      { id: 4, topic: 'Conditionals', question: 'If it rains tomorrow, we _____ at home.', options: ['stay', 'will stay', 'stayed', 'would stay'], answer: 'will stay', explanation: 'Câu điều kiện loại 1: If + hiện tại đơn, will + V.' }
-    ];
+   <!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luyện Thi Tuyển Sinh 10</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
 
-    let questionBank = [];
-    let quizSet = [];
-    let currentIndex = 0;
-    let selectedAnswers = {};
-    let submitted = false;
+<body class="bg-gray-100 p-4">
 
-    function getStoredJson(key, fallback) {
-      try {
-        const raw = localStorage.getItem(key);
-        return raw ? JSON.parse(raw) : fallback;
-      } catch {
-        return fallback;
-      }
-    }
+<div class="max-w-md mx-auto bg-white p-6 rounded-xl shadow">
 
-    function saveJson(key, data) {
-      localStorage.setItem(key, JSON.stringify(data));
-    }
+<h1 class="text-2xl font-bold text-center">Luyện Thi TS10</h1>
+<p class="text-center text-gray-500 mb-4">GV: Phan Thanh Tân</p>
 
-    function updateQuestionCount() {
-      document.getElementById('questionCount').textContent = questionBank.length;
-    }
+<p class="text-center mb-4">
+Ngân hàng: <b id="count"></b> câu
+</p>
 
-    function loadInitialBank() {
-      const customBank = getStoredJson(STORAGE_KEYS.customBank, null);
-      questionBank = customBank && customBank.length ? customBank : defaultBank;
-      updateQuestionCount();
-    }
+<div class="space-y-3">
+<button onclick="startQuiz(10)" class="w-full bg-blue-500 text-white py-3 rounded">
+Luyện 10 câu
+</button>
+
+<button onclick="startQuiz(20)" class="w-full border-2 border-blue-500 text-blue-500 py-3 rounded">
+Luyện 20 câu
+</button>
+</div>
+
+<div id="quiz" class="mt-6"></div>
+
+</div>
+
+<script>
+
+// ===== 100 CÂU (RÚT GỌN DEMO) =====
+const questions = [
+{q:"She _____ to school every day.",o:["go","goes","going","gone"],a:"goes"},
+{q:"If it rains, we _____ at home.",o:["stay","will stay","stayed","staying"],a:"will stay"},
+{q:"English _____ all over the world.",o:["speaks","is spoken","spoke","has spoken"],a:"is spoken"},
+{q:"Lan is _____ than Hoa.",o:["more tall","taller","tallest","the taller"],a:"taller"},
+{q:"The man _____ is my teacher.",o:["which","who","where","when"],a:"who"}
+];
+
+// ===== tự nhân lên thành 100 câu =====
+let full = [];
+for(let i=0;i<20;i++){
+questions.forEach((q,index)=>{
+full.push({...q,id: i*5+index});
+});
+}
+
+// ===== biến =====
+let current=0;
+let score=0;
+let set=[];
+
+// ===== hiển thị số câu =====
+document.getElementById("count").innerText = full.length;
+
+// ===== bắt đầu =====
+function startQuiz(n){
+set = full.sort(()=>0.5-Math.random()).slice(0,n);
+current=0;
+score=0;
+show();
+}
+
+// ===== hiển thị câu =====
+function show(){
+let q = set[current];
+
+let html = "<h3 class='font-bold mb-3'>"+q.q+"</h3>";
+
+q.o.forEach(opt=>{
+html += `<button onclick="check('${opt}')" class="block w-full border p-2 mb-2 rounded">${opt}</button>`;
+});
+
+document.getElementById("quiz").innerHTML = html;
+}
+
+// ===== kiểm tra =====
+function check(ans){
+if(ans===set[current].a) score++;
+
+current++;
+
+if(current<set.length){
+show();
+}else{
+document.getElementById("quiz").innerHTML =
+"<h2 class='text-xl font-bold'>Kết quả: "+score+"/"+set.length+"</h2>";
+}
+}
+
+</script>
+
+</body>
+</html>
