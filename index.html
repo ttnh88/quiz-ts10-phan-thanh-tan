@@ -1,181 +1,469 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luyện Thi TS10</title>
-<script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luyện Thi Tuyển Sinh 10</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-[#f5f7fb] font-sans">
+<body class="bg-[#f5f7fb] min-h-screen text-slate-800">
+  <div class="max-w-md mx-auto px-4 py-6">
 
-<div class="max-w-md mx-auto p-4">
+    <!-- HOME -->
+    <div id="homeScreen">
+      <div class="flex items-center justify-between mb-8">
+        <div class="text-2xl">←</div>
+        <div class="text-lg font-semibold truncate px-3">Luyện Thi Tuyển Sinh 10 - Phan Thanh Tân</div>
+        <div class="text-2xl">⋯</div>
+      </div>
 
-<!-- HEADER -->
-<div class="text-center mt-6">
-<div class="w-24 h-24 mx-auto bg-blue-50 rounded-2xl flex items-center justify-center shadow">
-📘
-</div>
+      <div class="flex justify-end mb-8">
+        <span class="text-xs font-semibold px-3 py-1 rounded-full bg-slate-100 text-slate-400">VER 1.0</span>
+      </div>
 
-<h1 class="text-3xl font-extrabold mt-6">Luyện Thi TS10</h1>
-<p class="text-gray-500 tracking-widest mt-2">MÔN TIẾNG ANH</p>
+      <div class="text-center">
+        <div class="w-28 h-28 mx-auto rounded-[28px] bg-blue-50 flex items-center justify-center shadow-sm">
+          <svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          </svg>
+        </div>
 
-<p class="mt-3 text-sm italic text-orange-600 font-semibold">
-By Mr. Phan Thanh Tân
-</p>
+        <h1 class="mt-8 text-[34px] leading-tight font-extrabold text-slate-800">Luyện Thi Tuyển Sinh 10</h1>
+        <p class="mt-2 text-[18px] tracking-[0.18em] font-medium text-slate-500">MÔN TIẾNG ANH</p>
 
-<p class="mt-6 text-gray-500">
-Ưu tiên câu mới và câu đã làm sai
-</p>
-</div>
+        <div class="mt-5 inline-flex items-center rounded-full border border-amber-300 bg-amber-50 px-5 py-2 text-[14px] italic font-semibold text-amber-700">
+          By Mr. Phan Thanh Tân
+        </div>
 
-<!-- SỐ CÂU -->
-<div class="bg-white rounded-2xl shadow p-6 mt-6 text-center">
-<p class="text-gray-400 font-bold">NGÂN HÀNG</p>
-<p class="text-5xl font-extrabold text-blue-600" id="count">0</p>
-<p class="text-blue-500 font-bold">CÂU</p>
-</div>
+        <h2 class="mt-8 text-[20px] font-bold text-slate-800">Hệ thống học thông minh</h2>
+        <p class="mt-2 text-slate-500 text-[18px] leading-8 px-4">
+          Ưu tiên câu mới và câu bạn đã làm sai ở các lần trước.
+        </p>
+      </div>
 
-<!-- BUTTON -->
-<button onclick="startQuiz(10)" class="w-full mt-6 bg-blue-600 text-white py-4 rounded-2xl text-xl font-bold">
-Luyện 10 câu ⚡
-</button>
+      <div class="mt-8 rounded-[28px] border border-slate-100 bg-white px-6 py-7 shadow-[0_8px_30px_rgba(15,23,42,0.05)]">
+        <div class="text-center">
+          <p class="text-[14px] tracking-[0.18em] font-bold text-slate-400">DỮ LIỆU NGÂN HÀNG</p>
+          <div class="mt-3 flex items-end justify-center gap-2">
+            <span id="questionCount" class="text-[56px] leading-none font-extrabold text-blue-600">100</span>
+            <span class="text-[22px] font-bold text-blue-500 mb-1">CÂU HỎI</span>
+          </div>
+        </div>
+      </div>
 
-<button onclick="startQuiz(20)" class="w-full mt-4 border-2 border-blue-600 text-blue-600 py-4 rounded-2xl text-xl font-bold">
-Luyện 20 câu ⚡
-</button>
+      <button onclick="startQuiz(10)" class="mt-8 w-full rounded-[28px] bg-blue-600 text-white font-bold text-[22px] py-6 shadow-[0_10px_24px_rgba(37,99,235,0.28)]">
+        Luyện tập 10 câu ⚡
+      </button>
 
-<button onclick="resetHistory()" class="w-full mt-6 text-gray-300 font-bold">
-XÓA LỊCH SỬ
-</button>
+      <button onclick="startQuiz(20)" class="mt-6 w-full rounded-[28px] border-[3px] border-blue-600 bg-white text-blue-600 font-bold text-[22px] py-6">
+        Luyện tập 20 câu ⚡
+      </button>
 
-<!-- QUIZ -->
-<div id="quizBox" class="mt-6"></div>
+      <button onclick="resetHistory()" class="mt-10 w-full text-center text-slate-300 font-bold tracking-[0.12em] text-[18px]">
+        XÓA LỊCH SỬ LÀM BÀI
+      </button>
 
-</div>
+      <p class="mt-10 text-center text-slate-400 text-[14px]">© 2026 Phan Thanh Tân English Class</p>
+    </div>
 
-<script>
+    <!-- QUIZ -->
+    <div id="quizScreen" class="hidden">
+      <div class="flex items-center justify-between mb-6">
+        <button onclick="goHome()" class="text-2xl">←</button>
+        <div class="font-semibold">Bài luyện tập</div>
+        <div class="w-6"></div>
+      </div>
 
-// ===== 100 CÂU THẬT (từ Excel cô) =====
-const bank = [
-{q:"She _____ to school every day.",o:["go","goes","going","gone"],a:"goes"},
-{q:"If it rains, we _____ at home.",o:["stay","will stay","stayed","staying"],a:"will stay"},
-{q:"English _____ all over the world.",o:["speaks","is spoken","spoke","has spoken"],a:"is spoken"},
-{q:"Lan is _____ than Hoa.",o:["more tall","taller","tallest","the taller"],a:"taller"},
-{q:"The man _____ is my teacher.",o:["which","who","where","when"],a:"who"}
-];
+      <div id="questionCard" class="rounded-[28px] bg-white p-5 shadow-[0_8px_30px_rgba(15,23,42,0.05)]">
+        <div class="flex items-center justify-between gap-4">
+          <div>
+            <p id="questionCounter" class="text-sm font-semibold text-slate-400"></p>
+            <p id="questionTopic" class="mt-1 text-sm font-semibold text-blue-600"></p>
+          </div>
+          <div class="w-28 h-3 rounded-full bg-slate-200 overflow-hidden">
+            <div id="progressBar" class="h-full bg-blue-600 rounded-full" style="width:0%"></div>
+          </div>
+        </div>
 
-// 👉 nhân thành 100 câu (giữ logic Smart)
-let questions=[];
-for(let i=0;i<20;i++){
-bank.forEach((q,index)=>{
-questions.push({...q,id:i*5+index});
-});
-}
+        <h2 id="questionText" class="mt-6 text-[24px] leading-9 font-bold text-slate-800"></h2>
+        <div id="optionsBox" class="mt-6 grid gap-3"></div>
 
-// ===== lưu lịch sử =====
-let history = JSON.parse(localStorage.getItem("his")||"{}");
+        <div id="explanationBox" class="hidden mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-4">
+          <p class="font-bold">Giải thích</p>
+          <p id="explanationText" class="mt-2 text-slate-600 leading-7"></p>
+        </div>
+      </div>
 
-// ===== biến =====
-let set=[];
-let current=0;
-let score=0;
-let submitted=false;
+      <div id="navButtons" class="grid grid-cols-2 gap-3 mt-5">
+        <button id="prevBtn" onclick="prevQuestion()" class="rounded-2xl bg-slate-200 py-4 font-bold text-slate-700">Câu trước</button>
+        <button id="nextBtn" onclick="nextQuestion()" class="rounded-2xl bg-slate-800 py-4 font-bold text-white">Câu tiếp</button>
+      </div>
 
-// ===== hiển thị số câu =====
-document.getElementById("count").innerText = questions.length;
+      <button id="submitBtn" onclick="submitQuiz()" class="mt-4 w-full rounded-[24px] bg-blue-600 py-5 font-bold text-white text-[20px] shadow-[0_10px_24px_rgba(37,99,235,0.28)]">
+        Nộp bài
+      </button>
 
-// ===== smart chọn câu =====
-function pick(n){
-let weighted = questions.map(q=>{
-let h = history[q.id] || {s:0,w:0,c:0};
-let w=1;
-if(h.s==0) w+=5;
-w+=h.w*3;
-w-=h.c;
-return {...q,w:Math.max(1,w)};
-});
+      <div id="resultBox" class="hidden mt-5 rounded-[28px] bg-white p-5 shadow-[0_8px_30px_rgba(15,23,42,0.05)]"></div>
+      <div id="reviewBox" class="hidden mt-5 space-y-5"></div>
+    </div>
+  </div>
 
-let res=[];
-while(res.length<n){
-let total = weighted.reduce((a,b)=>a+b.w,0);
-let r=Math.random()*total;
+  <script>
+    const STORAGE_KEYS = {
+      history: 'quiz_ts10_history_ptt'
+    };
 
-for(let i=0;i<weighted.length;i++){
-r-=weighted[i].w;
-if(r<=0){
-res.push(weighted[i]);
-weighted.splice(i,1);
-break;
-}
-}
-}
-return res;
-}
+    // CÔ THAY TOÀN BỘ NGÂN HÀNG CÂU HỎI CỦA CÔ VÀO ĐÂY NẾU MUỐN
+    const defaultBank = [
+      {
+        id: 1,
+        topic: "Tenses",
+        question: "She ______ in this company since 2020.",
+        options: ["worked", "is working", "has worked", "works"],
+        answer: "has worked",
+        explanation: "Dùng thì hiện tại hoàn thành khi câu có từ nhận biết là \"since\"."
+      },
+      {
+        id: 2,
+        topic: "Relative clauses",
+        question: "The book ______ cover is red belongs to my sister.",
+        options: ["who", "which", "whose", "whom"],
+        answer: "whose",
+        explanation: "\"Whose\" dùng để chỉ sự sở hữu."
+      },
+      {
+        id: 3,
+        topic: "Passive voice",
+        question: "English ______ all over the world.",
+        options: ["speaks", "is spoken", "spoke", "has spoken"],
+        answer: "is spoken",
+        explanation: "Câu bị động hiện tại đơn: am/is/are + V3."
+      },
+      {
+        id: 4,
+        topic: "Conditionals",
+        question: "If it rains tomorrow, we ______ at home.",
+        options: ["stay", "will stay", "stayed", "would stay"],
+        answer: "will stay",
+        explanation: "Câu điều kiện loại 1: If + hiện tại đơn, will + V."
+      },
+      {
+        id: 5,
+        topic: "Comparisons",
+        question: "Lan is ______ than Hoa.",
+        options: ["more tall", "taller", "tallest", "the taller"],
+        answer: "taller",
+        explanation: "So sánh hơn của tính từ ngắn: adjective + er."
+      },
+      {
+        id: 6,
+        topic: "Rewrite",
+        question: "Choose the sentence closest in meaning: 'They built this bridge last year.'",
+        options: [
+          "This bridge is built last year.",
+          "This bridge was built last year.",
+          "This bridge built last year.",
+          "This bridge has built last year."
+        ],
+        answer: "This bridge was built last year.",
+        explanation: "Chuyển sang bị động ở quá khứ đơn: was/were + V3/ed."
+      },
+      {
+        id: 7,
+        topic: "Tenses",
+        question: "Listen! Someone ______ at the door.",
+        options: ["knocks", "is knocking", "knocked", "has knocked"],
+        answer: "is knocking",
+        explanation: "Dấu hiệu \"Listen!\" thường dùng thì hiện tại tiếp diễn."
+      },
+      {
+        id: 8,
+        topic: "Passive voice",
+        question: "The homework ______ by Nam yesterday.",
+        options: ["did", "was done", "is done", "does"],
+        answer: "was done",
+        explanation: "Câu bị động thì quá khứ đơn: was/were + V3."
+      },
+      {
+        id: 9,
+        topic: "Comparisons",
+        question: "This is the ______ book I have ever read.",
+        options: ["most interesting", "more interesting", "interesting", "interest"],
+        answer: "most interesting",
+        explanation: "So sánh nhất với tính từ dài: the most + adjective."
+      },
+      {
+        id: 10,
+        topic: "Conditionals",
+        question: "If I ______ enough money, I would buy a new bike.",
+        options: ["have", "had", "will have", "am having"],
+        answer: "had",
+        explanation: "Câu điều kiện loại 2: If + quá khứ đơn, would + V."
+      }
+    ];
 
-// ===== start =====
-function startQuiz(n){
-set = pick(n);
-current=0;
-score=0;
-submitted=false;
-show();
-}
+    // Tạm nhân thành 100 để app chạy đúng giao diện và số lượng
+    let questionBank = [];
+    for (let i = 0; i < 10; i++) {
+      defaultBank.forEach((q, index) => {
+        questionBank.push({
+          ...q,
+          id: i * defaultBank.length + index + 1
+        });
+      });
+    }
 
-// ===== show =====
-function show(){
-let q=set[current];
+    let quizSet = [];
+    let currentIndex = 0;
+    let selectedAnswers = {};
+    let submitted = false;
 
-let html = `
-<div class="bg-white p-5 rounded-2xl shadow">
-<p class="text-sm text-gray-400">Câu ${current+1}/${set.length}</p>
-<h3 class="text-xl font-bold mt-2">${q.q}</h3>
-<div class="mt-4 space-y-2">
-`;
+    function getStoredJson(key, fallback) {
+      try {
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : fallback;
+      } catch {
+        return fallback;
+      }
+    }
 
-q.o.forEach(opt=>{
-html+=`<button onclick="choose('${opt}')" class="w-full border p-3 rounded-xl text-left">${opt}</button>`;
-});
+    function saveJson(key, data) {
+      localStorage.setItem(key, JSON.stringify(data));
+    }
 
-html+=`</div></div>`;
-document.getElementById("quizBox").innerHTML=html;
-}
+    function shuffle(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
 
-// ===== chọn =====
-function choose(ans){
-if(submitted) return;
+    function pickQuestions(bank, history, count) {
+      const weighted = bank.map((q) => {
+        const stat = history[q.id] || { seen: 0, correct: 0, wrong: 0 };
+        let weight = 1;
+        if (stat.seen === 0) weight += 5;
+        weight += stat.wrong * 3;
+        weight -= Math.min(stat.correct, 2);
+        return { ...q, weight: Math.max(1, weight) };
+      });
 
-if(ans===set[current].a) score++;
+      const chosen = [];
+      const pool = [...weighted];
+      while (chosen.length < Math.min(count, pool.length)) {
+        const total = pool.reduce((sum, item) => sum + item.weight, 0);
+        let r = Math.random() * total;
+        let selectedIndex = 0;
+        for (let i = 0; i < pool.length; i++) {
+          r -= pool[i].weight;
+          if (r <= 0) {
+            selectedIndex = i;
+            break;
+          }
+        }
+        chosen.push(pool[selectedIndex]);
+        pool.splice(selectedIndex, 1);
+      }
+      return chosen;
+    }
 
-let h = history[set[current].id]||{s:0,w:0,c:0};
-h.s++;
-if(ans===set[current].a) h.c++;
-else h.w++;
-history[set[current].id]=h;
+    function startQuiz(count) {
+      const history = getStoredJson(STORAGE_KEYS.history, {});
+      quizSet = pickQuestions(questionBank, history, count);
+      currentIndex = 0;
+      selectedAnswers = {};
+      submitted = false;
 
-localStorage.setItem("his",JSON.stringify(history));
+      document.getElementById('homeScreen').classList.add('hidden');
+      document.getElementById('quizScreen').classList.remove('hidden');
+      document.getElementById('questionCard').classList.remove('hidden');
+      document.getElementById('navButtons').classList.remove('hidden');
+      document.getElementById('submitBtn').classList.remove('hidden');
+      document.getElementById('resultBox').classList.add('hidden');
+      document.getElementById('reviewBox').classList.add('hidden');
 
-current++;
+      renderQuestion();
+    }
 
-if(current<set.length){
-show();
-}else{
-submitted=true;
-document.getElementById("quizBox").innerHTML=
-`<div class="bg-white p-6 rounded-2xl shadow text-center">
-<h2 class="text-2xl font-bold">Kết quả</h2>
-<p class="text-3xl font-extrabold mt-3 text-blue-600">${score}/${set.length}</p>
-</div>`;
-}
-}
+    function goHome() {
+      document.getElementById('quizScreen').classList.add('hidden');
+      document.getElementById('homeScreen').classList.remove('hidden');
+      document.getElementById('reviewBox').classList.add('hidden');
+      document.getElementById('resultBox').classList.add('hidden');
+    }
 
-// ===== reset =====
-function resetHistory(){
-localStorage.removeItem("his");
-alert("Đã xóa lịch sử");
-}
+    function renderQuestion() {
+      const q = quizSet[currentIndex];
+      if (!q) return;
 
-</script>
+      document.getElementById('questionCounter').textContent = 'Câu ' + (currentIndex + 1) + ' / ' + quizSet.length;
+      document.getElementById('questionTopic').textContent = q.topic || 'Chưa phân loại';
+      document.getElementById('questionText').textContent = q.question;
+      document.getElementById('progressBar').style.width = (((currentIndex + 1) / quizSet.length) * 100) + '%';
 
+      const optionsBox = document.getElementById('optionsBox');
+      optionsBox.innerHTML = '';
+
+      q.options.forEach(option => {
+        const btn = document.createElement('button');
+        btn.textContent = option;
+        const selected = selectedAnswers[q.id] === option;
+        let className = 'w-full rounded-[20px] border px-4 py-4 text-left text-[18px] font-semibold transition ';
+
+        if (submitted && option === q.answer) className += 'border-emerald-500 bg-emerald-50 text-emerald-700';
+        else if (submitted && selected && option !== q.answer) className += 'border-rose-500 bg-rose-50 text-rose-700';
+        else if (selected) className += 'border-blue-600 bg-blue-50 text-blue-700';
+        else className += 'border-slate-200 bg-white text-slate-800';
+
+        btn.className = className;
+        btn.onclick = () => chooseAnswer(q.id, option);
+        optionsBox.appendChild(btn);
+      });
+
+      const explanationBox = document.getElementById('explanationBox');
+      if (submitted) {
+        explanationBox.classList.remove('hidden');
+        document.getElementById('explanationText').textContent = q.explanation || 'Chưa có giải thích.';
+      } else {
+        explanationBox.classList.add('hidden');
+      }
+
+      document.getElementById('prevBtn').disabled = currentIndex === 0;
+      document.getElementById('nextBtn').disabled = currentIndex === quizSet.length - 1;
+    }
+
+    function chooseAnswer(questionId, option) {
+      if (submitted) return;
+      selectedAnswers[questionId] = option;
+      renderQuestion();
+    }
+
+    function prevQuestion() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        renderQuestion();
+      }
+    }
+
+    function nextQuestion() {
+      if (currentIndex < quizSet.length - 1) {
+        currentIndex++;
+        renderQuestion();
+      }
+    }
+
+    function submitQuiz() {
+      const history = getStoredJson(STORAGE_KEYS.history, {});
+      let correct = 0;
+
+      quizSet.forEach(q => {
+        const oldStat = history[q.id] || { seen: 0, correct: 0, wrong: 0 };
+        const isCorrect = selectedAnswers[q.id] === q.answer;
+        if (isCorrect) correct++;
+
+        history[q.id] = {
+          seen: oldStat.seen + 1,
+          correct: oldStat.correct + (isCorrect ? 1 : 0),
+          wrong: oldStat.wrong + (isCorrect ? 0 : 1)
+        };
+      });
+
+      saveJson(STORAGE_KEYS.history, history);
+      submitted = true;
+
+      document.getElementById('questionCard').classList.add('hidden');
+      document.getElementById('navButtons').classList.add('hidden');
+      document.getElementById('submitBtn').classList.add('hidden');
+
+      const resultBox = document.getElementById('resultBox');
+      resultBox.classList.remove('hidden');
+      resultBox.innerHTML = `
+        <div class="flex items-center justify-between gap-4">
+          <div class="flex items-center gap-4">
+            <div class="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 text-3xl">🏅</div>
+            <div>
+              <p class="text-[28px] font-extrabold text-slate-800 leading-tight">Hoàn thành!</p>
+              <p class="text-[14px] tracking-[0.18em] font-bold text-slate-400 mt-1">KẾT QUẢ LUYỆN TẬP</p>
+            </div>
+          </div>
+          <div class="text-right">
+            <p class="text-[14px] font-bold text-blue-500">ĐIỂM SỐ</p>
+            <p class="text-[38px] leading-none font-extrabold text-blue-600 mt-1">${correct}/${quizSet.length}</p>
+          </div>
+        </div>
+      `;
+
+      renderReview();
+    }
+
+    function renderReview() {
+      const reviewBox = document.getElementById('reviewBox');
+      reviewBox.classList.remove('hidden');
+
+      let html = '';
+
+      quizSet.forEach((q, index) => {
+        const userAnswer = selectedAnswers[q.id] || '';
+        const isCorrect = userAnswer === q.answer;
+
+        html += `
+          <div class="rounded-[28px] border ${isCorrect ? 'border-emerald-200' : 'border-rose-200'} bg-white p-5 shadow-[0_8px_24px_rgba(15,23,42,0.04)]">
+            <div class="flex items-center justify-between">
+              <p class="text-[14px] font-bold tracking-[0.08em] ${isCorrect ? 'text-emerald-600' : 'text-rose-500'}">
+                CÂU ${index + 1}: ${isCorrect ? 'ĐÚNG' : 'CHƯA ĐÚNG'}
+              </p>
+              <div class="text-2xl ${isCorrect ? 'text-emerald-500' : 'text-rose-500'}">
+                ${isCorrect ? '✓' : '!'}
+              </div>
+            </div>
+
+            <h3 class="mt-5 text-[22px] leading-9 font-extrabold text-slate-800">${q.question}</h3>
+            <div class="mt-5 space-y-3">
+        `;
+
+        q.options.forEach((option, optIndex) => {
+          const label = ['A', 'B', 'C', 'D'][optIndex];
+          const isUserChoice = userAnswer === option;
+          const isRight = q.answer === option;
+
+          let optionClass = 'border-slate-100 bg-slate-50 text-slate-400';
+          if (isUserChoice && !isRight) optionClass = 'border-rose-200 bg-rose-50 text-rose-700';
+          if (isRight) optionClass = 'border-emerald-200 bg-emerald-50 text-emerald-700';
+
+          html += `
+            <div class="rounded-[20px] border px-5 py-4 ${optionClass}">
+              <span class="font-extrabold mr-3">${label}.</span>
+              <span class="font-semibold">${option}</span>
+            </div>
+          `;
+        });
+
+        html += `
+            </div>
+
+            <div class="mt-6 rounded-[22px] border border-blue-100 bg-blue-50 p-5">
+              <p class="text-[14px] font-bold tracking-[0.08em] text-blue-600">GIẢI THÍCH CHI TIẾT</p>
+              <p class="mt-3 text-[18px] leading-8 italic text-blue-900">
+                ${q.explanation || 'Chưa có giải thích.'}
+              </p>
+            </div>
+          </div>
+        `;
+      });
+
+      reviewBox.innerHTML = html;
+    }
+
+    function resetHistory() {
+      localStorage.removeItem(STORAGE_KEYS.history);
+      alert('Đã xóa lịch sử làm bài');
+    }
+
+    document.getElementById('questionCount').textContent = questionBank.length;
+  </script>
 </body>
 </html>
